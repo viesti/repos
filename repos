@@ -41,15 +41,19 @@ def pull(repos):
         finally:
             chdir("..")
 
-if __name__ == '__main__':
-    config = ConfigParser.ConfigParser()
+def read_hidden_repos():
     config_file = os.environ["HOME"] + "/.repos/config"
+    if not os.path.exists(config_file):
+        return []
+
+    config = ConfigParser.ConfigParser()
     if len(config.read(config_file)) != 1:
         print "Could not read configuration: " + config_file
         exit(1)
-    hidden = [repo.strip() for repo in config.get("main", "hidden").split(",")]
+    return [repo.strip() for repo in config.get("main", "hidden").split(",")]
 
-    repo_list = repos(hidden)
+if __name__ == '__main__':
+    repo_list = repos(read_hidden_repos())
     if "status" in sys.argv[0]:
         status(repo_list)
     elif "fetch" in sys.argv[0]:
