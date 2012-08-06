@@ -12,6 +12,8 @@ Usage (symlink style):
         ln -s repos fetch
         ln -s repos pull
         ln -s repos checkout
+        ln -s repos branches (lists out branches in all repos,
+                              given an argument, shows repos that have that branch)
 
 3. Go to a directory with mani Git repositories, and say ```status``` to get ```git status``` listing from all of the repos
 
@@ -21,6 +23,7 @@ Usage (symlink style):
     -f -> git fetch
     -p -> git pull
     -c <branch> -> git checkout <branch>
+    -b [full branch name]
 
 If you don't want some repositories to appear in the listing, filter them out by adding ```~/.repos/config``` file:
 
