@@ -45,6 +45,25 @@ def pull(repos):
         finally:
             chdir("..")
 
+def list_branches(repos, branch=None):
+    branches_per_repo = {}
+    for repo in repos:
+        branches = []
+        output = check_output(base_args(repo) + ["branch", "-a"])
+        for line in output.split('\n'):
+            if line.strip():
+                branches.append(line.strip().replace("* ", ""))
+        branches_per_repo[repo] = branches
+    if not branch:
+        all_branches = set()
+        for k, v in branches_per_repo.items():
+            all_branches = all_branches | set(v)
+        print "\n".join(all_branches)
+    else:
+        for k, v in branches_per_repo.items():
+            if branch in v:
+                print k
+
 def read_hidden_repos():
     config_file = os.environ["HOME"] + "/.repos/config"
     if not os.path.exists(config_file):
@@ -59,7 +78,7 @@ def read_hidden_repos():
 if __name__ == '__main__':
     repo_list = repos(read_hidden_repos())
     if "repos" in sys.argv[0]:
-        opts, _ = getopt(sys.argv[1:], "sfpc:")
+        opts, _ = getopt(sys.argv[1:], "sfpc:b")
         for option, value in opts:
             if option == "-s":
                 status(repo_list)
@@ -69,6 +88,11 @@ if __name__ == '__main__':
                 pull(repo_list)
             elif option == "-c":
                 checkout(repo_list, value)
+            elif option == "-b":
+                if value:
+                    list_branches(repo_list, sys.argv[1])
+                else:
+                    list_branches(repo_list)
     else:
         if "status" in sys.argv[0]:
             status(repo_list)
@@ -81,3 +105,8 @@ if __name__ == '__main__':
             checkout(repo_list, sys.argv[1])
         elif "pull" in sys.argv[0]:
             pull(repo_list)
+        elif "branches" in sys.argv[0]:
+            if len(sys.argv) > 1:
+                list_branches(repo_list, sys.argv[1])
+            else:
+                list_branches(repo_list)
