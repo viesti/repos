@@ -4,7 +4,7 @@ import sys, ConfigParser, os, argparse
 from subprocess import check_output, check_call, CalledProcessError, STDOUT
 from os import listdir, path, chdir
 from re import search, IGNORECASE
-from getopt import getopt
+from collections import defaultdict
 
 def repos(hidden):
     return [x for x in listdir(".") if path.exists("%s/.git" % x) and x not in hidden]
@@ -60,10 +60,13 @@ def list_branches(repos, key=None):
             all_branches = all_branches | set(v)
         print "\n".join(all_branches)
     else:
+        result = defaultdict(list)
         for repo, branches in branches_per_repo.items():
             for branch in branches:
                 if search(".*" + key + ".*", branch, flags=IGNORECASE):
-                    print "%s: %s" % (repo, branch)
+                    result[repo].append(branch)
+        for k, v in result.items():
+            print "%s: %s" % (k, ",".join(v))
 
 def read_hidden_repos():
     config_file = os.environ["HOME"] + "/.repos/config"
