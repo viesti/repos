@@ -23,7 +23,7 @@ Usage (symlink style):
     -f -> git fetch
     -p -> git pull
     -c <branch> -> git checkout <branch>
-    -b [full branch name]
+    -b [branch name]
 
 If you don't want some repositories to appear in the listing, filter them out by adding ```~/.repos/config``` file:
 
