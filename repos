@@ -66,7 +66,10 @@ def list_branches(repos, key=None):
                 if search(".*" + key + ".*", branch, flags=IGNORECASE):
                     result[repo].append(branch)
         for k, v in result.items():
-            print "%s: %s" % (k, ",".join(v))
+            prefix = "%s: " % k
+            print "%s%s" % (prefix, v[0])
+            for b in v[1:]:
+                print "%s%s" % (len(prefix) * " ", b)
 
 def read_hidden_repos():
     config_file = os.environ["HOME"] + "/.repos/config"
