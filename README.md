@@ -15,7 +15,7 @@ Usage (symlink style):
         ln -s repos branches (lists out branches in all repos,
                               given an argument, shows repos that have that branch)
 
-3. Go to a directory with mani Git repositories, and say ```status``` to get ```git status``` listing from all of the repos
+3. Go to a directory with many Git repositories, and say ```status``` to get ```git status``` listing from all of the repositories
 
 ```repos``` accepts parameters too, if you don't want to use symlink style (like on Windows).
 
