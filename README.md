@@ -12,8 +12,10 @@ Usage (symlink style):
         ln -s repos fetch
         ln -s repos pull
         ln -s repos checkout
-        ln -s repos branches (lists out branches in all repos,
-                              given an argument, shows repos that have that branch)
+        ln -s repos branch
+
+        # "branch" lists out branches in all repos,
+        # Given a branch name as an argument, shows repos that have that branch
 
 3. Go to a directory with many Git repositories, and say ```status``` to get ```git status``` listing from all of the repositories
 

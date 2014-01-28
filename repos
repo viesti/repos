@@ -26,7 +26,11 @@ def status(repos):
 def fetch(repos):
     for repo in repos:
         print "Fetching from %s" % repo
-        check_call(base_args(repo) + ["fetch"])
+        try:
+            check_call(base_args(repo) + ["fetch"])
+        except CalledProcessError, e:
+            print "Failed to fetch from %s\n\033[31m%s\033[0m" % (repo, e)
+        print ""
 
 def checkout(repos, branch):
     for repo in repos:
@@ -98,7 +102,7 @@ class CheckoutAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         checkout(repo_list, values)
 
-class BranchesAction(argparse.Action):
+class BranchAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         if values:
             list_branches(repo_list, values)
@@ -113,7 +117,7 @@ if __name__ == '__main__':
         parser.add_argument("-f", "--fetch", action=FetchAction, nargs=0)
         parser.add_argument("-p", "--pull", action=PullAction, nargs=0)
         parser.add_argument("-c", "--checkout", action=CheckoutAction, metavar="branch")
-        parser.add_argument("-b", "--branches", action=BranchesAction, nargs="?", metavar="pattern")
+        parser.add_argument("-b", "--branch", action=BranchAction, nargs="?", metavar="pattern")
         parser.parse_args()
     else:
         if "status" in sys.argv[0]:
@@ -127,7 +131,7 @@ if __name__ == '__main__':
             checkout(repo_list, sys.argv[1])
         elif "pull" in sys.argv[0]:
             pull(repo_list)
-        elif "branches" in sys.argv[0]:
+        elif "branch" in sys.argv[0]:
             if len(sys.argv) > 1:
                 list_branches(repo_list, sys.argv[1])
             else:
